@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
-import cors from "@fastify/cors"; // Import CORS plugin
+import cors from "@fastify/cors"; 
 import studentRoutes from "./route/student.router";
 import userRouter from "./route/user.router";
 import fileUploadRoutes from "./route/fileUpload.router";
@@ -70,6 +70,20 @@ fastify.get("/text", async (request, reply) => {
   return "hello world";
 });
 
+
+fastify.get('/hello', async (request, reply) => {
+  
+  const acceptHeader = request.headers['accept'];
+
+  if (acceptHeader && acceptHeader.includes('application/json')) {
+    
+    return { message: "Hello World" };
+  } else {
+    
+    return "Hello World";
+  }
+});
+
 fastify.get("/jsonFormat", async (request, reply) => {
   reply.code(200).send({
     message: "Hello world!",
@@ -78,7 +92,7 @@ fastify.get("/jsonFormat", async (request, reply) => {
 
 
 
-
+// custom error handler
 fastify.setErrorHandler((error, request, reply) => {
   fastify.log.error(`Error occurred: ${error.message}`, error);
   const statusCode = error.statusCode || 500;
@@ -97,19 +111,19 @@ const start = async () => {
       "Swagger documentation available at http://localhost:3000/documentation"
     );
 
-    const shutdown = async () => {
-      try {
-        await fastify.close();
-        console.log("Server closed gracefully.");
-        process.exit(0);
-      } catch (error) {
-        fastify.log.error("Error during shutdown:", error);
-        process.exit(1);
-      }
-    };
+    // const shutdown = async () => {
+    //   try {
+    //     await fastify.close();
+    //     console.log("Server closed gracefully.");
+    //     process.exit(0);
+    //   } catch (error) {
+    //     fastify.log.error("Error during shutdown:", error);
+    //     process.exit(1);
+    //   }
+    // };
 
-    process.on("SIGINT", shutdown);
-    process.on("SIGTERM", shutdown);
+    // process.on("SIGINT", shutdown);
+    // process.on("SIGTERM", shutdown);
   } catch (error) {
     fastify.log.error("Server failed to start:", error);
     process.exit(1);

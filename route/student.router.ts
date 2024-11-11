@@ -91,12 +91,13 @@ async function studentRoutes(fastify: FastifyInstance) {
         },
     }, async (request: FastifyRequest<{ Querystring: { class?: string } }>, reply: FastifyReply) => {
         const { class: className } = request.query;
-
+console.log("hh")
         if (!className) {
             return reply.status(400).send({ error: 'Class query parameter is required' });
         }
-
+        
         const studentsInClass = students.filter(s => s.class === className);
+
         return studentsInClass.length ? studentsInClass : { message: 'No students found in this class' };
     });
 }
