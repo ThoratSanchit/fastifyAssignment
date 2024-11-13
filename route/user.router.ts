@@ -1,9 +1,5 @@
 import { FastifyInstance } from "fastify";
-import {
-  postStudent,
-  register,
-  protectedRoute,
-} from "../controller/user.controller";
+import { postStudent, protectedRoute,login } from "../controller/user.controller";
 
 async function userRouter(fastify: FastifyInstance) {
   fastify.post(
@@ -38,35 +34,6 @@ async function userRouter(fastify: FastifyInstance) {
   );
 
   fastify.post(
-    "/jwt",
-    {
-      schema: {
-        description: "Register a user and return JWT",
-        tags: ["User"],
-        body: {
-          type: "object",
-          properties: {
-            username: { type: "string" },
-            email: { type: "string" },
-            password: { type: "string" },
-          },
-          required: ["username", "password"],
-        },
-        response: {
-          200: {
-            description: "JWT Token",
-            type: "object",
-            properties: {
-              token: { type: "string" },
-            },
-          },
-        },
-      },
-    },
-    register
-  );
-
-  fastify.post(
     "/protectedRoute",
     {
       schema: {
@@ -97,6 +64,8 @@ async function userRouter(fastify: FastifyInstance) {
     },
     protectedRoute
   );
+
+fastify.post("/login",login);
 }
 
 export default userRouter;

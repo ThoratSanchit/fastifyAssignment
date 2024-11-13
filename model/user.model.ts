@@ -4,6 +4,8 @@ import { sequelize } from "../db/db";
 class StudentAttributes extends Model {
   id: any;
   email: any;
+  name: any;
+  password: any;
 }
 
 StudentAttributes.init(
@@ -20,6 +22,7 @@ StudentAttributes.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique:true
     },
     password: {
       type: DataTypes.STRING,

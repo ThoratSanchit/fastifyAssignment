@@ -2,22 +2,22 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import userModel from "../model/user.model";
 import { UserInterface } from "../intarface/user.intarface";
 import jwt from "jsonwebtoken";
-
 const JWT_SECRET = "gy7gyuygygy6t7t";
+
 export const postStudent = async (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
   try {
     const createUser = request.body as UserInterface;
-    if (createUser.username.length <3) {
+    if (createUser.username.length < 3) {
       reply.code(200).send({
         message: "Username must have min length as 3 characters..",
       });
     }
 
     const user = await userModel.create({ ...createUser });
-   
+
     reply.code(201).send({
       status_code: 201,
       id: user.id,
@@ -29,32 +29,44 @@ export const postStudent = async (
   }
 };
 
-export const register = async (
-  request: FastifyRequest,
-  reply: FastifyReply
-) => {
+
+export const login = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
-    const createUser = request.body as UserInterface;
+    const { email, password } = request.body as {
+      email: string;
+      password: string;
+    };
 
-    const user = await userModel.create({
-      ...createUser,
-    });
+   
+    const user = await userModel.findOne({ where: { email } });
+    if (!user) {
+      return reply.status(404).send({ message: "Invalid email id." });
+    }
 
+    if (password !== user.password) {
+      reply.send({
+        message: "Invalid password",
+      });
+    }
+
+  
     const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    reply.status(201).send({
-      status_code: 201,
-      user,
+    reply.status(200).send({
+      status_code: 200,
+      user: {
+        id: user.id,
+        username: user.name,
+        email: user.email,
+      },
       token,
-      message: "User registered successfully.",
+      message: "Login successful",
     });
   } catch (error) {
     console.error(error);
-    reply.status(500).send({
-      message: "Internal Server Error",
-    });
+    reply.status(500).send({ message: "Internal Server Error" });
   }
 };
 
