@@ -103,7 +103,7 @@ async function studentRoutes(fastify: FastifyInstance) {
       reply: FastifyReply
     ) => {
       const { class: className } = request.query;
-      console.log("hh");
+
       if (!className) {
         return reply
           .status(400)

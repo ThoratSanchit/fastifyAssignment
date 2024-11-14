@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { MultipartFile } from '@fastify/multipart';
 
-const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.pdf', '.doc', '.docx'];
+const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.pdf', '.doc', '.heic', '.docx'];
 
 export const uploadFile = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
@@ -33,10 +33,10 @@ export const uploadFile = async (request: FastifyRequest, reply: FastifyReply) =
     });
 
     // Handle upload errors
-    fileStream.on('error', (err) => {
-      console.error(err);
-      reply.status(500).send({ message: 'File upload failed' });
-    });
+    // fileStream.on('error', (err) => {
+    //   console.error(err);
+    //   reply.status(500).send({ message: 'File upload failed' });
+    // });
 
   } catch (err) {
     console.error(err);
