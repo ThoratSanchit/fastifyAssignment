@@ -29,7 +29,6 @@ export const postStudent = async (
   }
 };
 
-
 export const login = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
     const { email, password } = request.body as {
@@ -37,7 +36,6 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
       password: string;
     };
 
-   
     const user = await userModel.findOne({ where: { email } });
     if (!user) {
       return reply.status(404).send({ message: "Invalid email id." });
@@ -49,7 +47,6 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
       });
     }
 
-  
     const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
       expiresIn: "1h",
     });
