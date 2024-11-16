@@ -26,18 +26,10 @@ export const uploadFile = async (
     const fileStream = fs.createWriteStream(uploadPath);
     data.file.pipe(fileStream);
 
-    fileStream.on("finish", () => {
-      reply.status(200).send({
-        message: "File uploaded successfully",
-        filename: data.filename,
-      });
-    });
-
     reply.status(200).send({
       message: "File uploaded successfully",
       filename: data.filename,
     });
-    
   } catch (err) {
     console.error(err);
     reply.status(500).send({ message: "File upload failed" });
